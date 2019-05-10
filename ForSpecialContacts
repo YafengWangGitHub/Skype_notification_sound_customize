@@ -1,32 +1,37 @@
-from skpy import Skype
 import time
+from skpy import Skype
 from pygame import mixer
 
 while True:
     localtime = time.localtime(time.time())
-    if localtime[3] == 21 and localtime[4] == 20:
+    if localtime[3] >= 9 and localtime[4] > 20: # enable special notification after 9:20
         break
 print("already break at " + str(localtime[3]) + ":" + str(localtime[4]))
 
 i = 0
+j = 0
+k = 0
 
-Skype('username', 'password', '.tokens-fred.2')
-sk = Skype(tokenFile='.tokens-fred.2')
+Skype('Skype username', 'password', '.tokens-fred.2') # there should be a empty file named ".tokens-fred.2" under same folder
+sk = Skype(tokenFile='.tokens-fred.2') # of course the token file can be renamed to whatever you need
 
-print(sk.conn)
-# print(sk.contacts["live:123"]) # the skype name of your contacts
-# print(sk.contacts["live:123"].chat)
+print(sk.conn) # print the connection status
 
 mixer.init() 
-mixer.music.load("123.mp3") # the music should be under same folder with this file
+mixer.music.load("music.mp3") # the music should be under same folder with this file
 
 while True:
-        ms = sk.chats["8:live:123"].getMsgs()
-        if len(ms)>5:
+        j += 1
+        if j>8: # the skype will broadcast 8 messages when beginning, add delay after this broadcast
+            time.sleep(350)  # "350" is in term of seconds          
+        ms = sk.chats["8:YourContactsUsername"].getMsgs() # the "8:" is needed
+        if len(ms)>= 10: # show the broadcast
             print("init..." + str(len(ms)))
-        elif len(ms)!=0:            
-            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            mixer.music.play()
-        else:
-            print("elif" + str(len(ms)))
-
+        elif len(ms)!=0: # received message
+            if i != 0:
+                print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                mixer.music.play()
+            i += 1
+        else:           # show cheching
+            k += 1
+            print("checking..." + str(k))
