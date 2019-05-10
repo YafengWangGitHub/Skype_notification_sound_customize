@@ -1,24 +1,32 @@
-# this file allows you to set special notification sounds for specific contacts
-
 from skpy import Skype
 import time
 from pygame import mixer
 
-i = 0
-sk = Skype('username', 'password') # modify here
-print(sk.conn)
+while True:
+    localtime = time.localtime(time.time())
+    if localtime[3] == 21 and localtime[4] == 20:
+        break
+print("already break at " + str(localtime[3]) + ":" + str(localtime[4]))
 
-print(sk.contacts["live:yourContactsName"]) # the skype name of your contacts
-print(sk.contacts["live:yourContactsName"].chat)
-sk.chats["8:live:yourContactsName"].getMsgs() # the "8:" is required"
-ch = sk.chats["8:live:yourContactsName"]
+i = 0
+
+Skype('username', 'password', '.tokens-fred.2')
+sk = Skype(tokenFile='.tokens-fred.2')
+
+print(sk.conn)
+# print(sk.contacts["live:123"]) # the skype name of your contacts
+# print(sk.contacts["live:123"].chat)
+
 mixer.init() 
-mixer.music.load("music.mp3") # the music should be under same folder with this file
+mixer.music.load("123.mp3") # the music should be under same folder with this file
 
 while True:
-    while sk.chats["8:live:yourContactsName"].getMsgs():
-        i += 1
-        if i > 7:
-            print(str(sk.chats["8:live:yourContactsName"].getMsgs()))
+        ms = sk.chats["8:live:123"].getMsgs()
+        if len(ms)>5:
+            print("init..." + str(len(ms)))
+        elif len(ms)!=0:            
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             mixer.music.play()
+        else:
+            print("elif" + str(len(ms)))
 
